@@ -13,8 +13,8 @@
     },
     "dependencies": {
         "del": "2.*.*",
-        "webpack": "1.*.*",
-        "spa-gulp": "1.*.*"
+        "spa-gulp": "1.*.*",
+        "webpack": "1.*.*"
     },
     "keywords": [
         "spa",
