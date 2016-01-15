@@ -107,6 +107,13 @@ function compile ( config, mode, done ) {
 }
 
 
+// task set was turned off in gulp.js
+if ( !config ) {
+    // do not create tasks
+    return;
+}
+
+
 // remove all generated js/map files
 gulp.task('webpack:clean', function () {
     return del([
