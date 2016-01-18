@@ -16,17 +16,11 @@ var path   = require('path'),
 // each profile inherits all options from the "default" profile
 module.exports = extend(true, {}, config, {
     default: {
-        // directory to look for source files
-        sourcePath: path.join(config.default.sourcePath, 'js'),
+        // main entry point
+        source: path.join(config.default.source, 'js', 'main.js'),
 
-        // main source entry point
-        sourceFile: 'main.js',
-
-        // directory to store output files
-        targetPath: path.join(config.default.targetPath, 'js'),
-
-        // intended output file name
-        targetFile: 'release.js',
+        // intended output file
+        target: path.join(config.default.target, 'js', 'release.js'),
 
         //// whether to use space or tab character for indentation
         //indentType: 'space',
@@ -57,8 +51,8 @@ module.exports = extend(true, {}, config, {
     },
 
     develop: {
-        targetFile: 'develop.js',
+        target: path.join(config.default.target, 'js', 'develop.js'),
 
-        sourceMap: 'develop.map'
+        sourceMap: path.join(config.default.target, 'js', 'develop.map')
     }
 });
