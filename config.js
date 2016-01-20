@@ -22,6 +22,15 @@ module.exports = extend(true, {}, config, {
         // intended output file
         target: path.join(config.default.target, 'js', 'release.js'),
 
+        debug: false,
+
+        cache: true,
+
+        // local variables available in the source files
+        variables: {
+            DEBUG: false
+        },
+
         //// whether to use space or tab character for indentation
         //indentType: 'space',
         //
@@ -52,6 +61,10 @@ module.exports = extend(true, {}, config, {
 
     develop: {
         target: path.join(config.default.target, 'js', 'develop.js'),
+
+        variables: {
+            DEBUG: true
+        },
 
         sourceMap: path.join(config.default.target, 'js', 'develop.map')
     }
