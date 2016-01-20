@@ -63,6 +63,8 @@ plugin.profiles.forEach(function ( profile ) {
             devtool: 'source-map',
             devtoolModuleFilenameTemplate: '[hash]',
             plugins: [
+                new webpack.optimize.OccurrenceOrderPlugin(true),
+                new webpack.IgnorePlugin(/spa-develop/)
                 //new webpack.ProgressPlugin(function ( percentage, msg ) {
                 //    console.log(msg);
                 //})
@@ -330,6 +332,7 @@ gulp.task('webpack:release', function () {
                     // this option prevents name changing
                     // use in case of strange errors
                     // mangle: false,
+                    sourceMap: false,
                     output: {
                         comments: false
                     },
