@@ -54,35 +54,109 @@ plugin.profiles.forEach(function ( profile ) {
     //console.log(path.dirname(profile.data.target));
     //plugin.prepare(profile.name);
     var compiler = webpack({
-            //context: process.cwd(),
-            entry: path.resolve(profile.data.source),
+            entry: profile.data.source,
             output: {
+                pathinfo: true,
                 filename: path.basename(profile.data.target),
-                path: path.dirname(profile.data.target)
+                path: path.dirname(profile.data.target),
+                sourceMapFilename: profile.data.sourceMap
             },
-            devtool: 'source-map',
-            devtoolModuleFilenameTemplate: '[hash]',
+            watchOptions: {
+                aggregateTimeout: 1000
+            },
+            devtool: profile.data.devtool,
             plugins: [
-                new webpack.optimize.OccurrenceOrderPlugin(true),
-                new webpack.IgnorePlugin(/spa-develop/)
+                new webpack.optimize.OccurrenceOrderPlugin(true)
+                //new webpack.IgnorePlugin(/spa-develop/)
                 //new webpack.ProgressPlugin(function ( percentage, msg ) {
                 //    console.log(msg);
                 //})
-                //new webpack.SourceMapDevToolPlugin({
-                //    filename: profile.data.target + '.map'
-                //})
             ]
         }),
+        report = function ( err, stats ) {
+            var json  = stats.toJson({source:false}),
+                log   = [],
+                warnings = false;
+
+            if ( err ) {
+                log.push('FATAL ERROR'.red, err);
+            } else {
+                // general info
+                log.push('********************************'.grey);
+                log.push('hash:\t'    + json.hash.bold);
+                log.push('version:\t' + json.version.bold);
+                log.push('time:\t'    + json.time.toString().bold + ' ms');
+                log.push('********************************'.grey);
+
+                // title and headers
+                log.push('ASSETS'.green);
+                log.push('\tSize\tName'.grey);
+                // data
+                json.assets.forEach(function ( asset ) {
+                    log.push('\t' + asset.size + '\t' + asset.name.bold);
+                });
+
+                // title and headers
+                log.push('MODULES'.green);
+                log.push('\tID\tSize\tErrs\tWarns\tName'.grey);
+
+                // sort modules by name (not always is necessary)
+                //json.modules.sort(function ( a, b ) { return a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
+
+                // data
+                json.modules.forEach(function ( module ) {
+                    log.push('\t' +
+                        module.id + '\t' +
+                        module.size + '\t' +
+                        (module.errors > 0 ? module.errors.toString().red : '0') + '\t' +
+                        (module.warnings > 0 ? module.warnings.toString().yellow : '0') + '\t' +
+                        (module.name.indexOf('./~/') === 0 ? module.name.replace(/\//g, '/'.grey) : module.name.bold.replace(/\//g, '/'.grey))
+                    );
+                });
+
+                json.errors.forEach(function ( error, errorIndex ) {
+                    log.push(('ERROR #' + errorIndex).red);
+                    error.split('\n').forEach(function ( line, lineIndex ) {
+                        if ( lineIndex === 0 ) {
+                            log.push(line.bold);
+                        } else {
+                            log.push('\t' + line.grey);
+                        }
+                    });
+                });
+
+                if ( warnings ) {
+                    json.warnings.forEach(function ( warning, warningIndex ) {
+                        log.push(('WARNING #' + warningIndex).yellow);
+                        warning.split('\n').forEach(function ( line, lineIndex ) {
+                            if ( lineIndex === 0 ) {
+                                log.push(line.bold);
+                            } else {
+                                log.push('\t' + line.grey);
+                            }
+                        });
+                    });
+                }
+            }
+
+            profile.notify({
+                info: log,
+                title: plugin.entry,
+                message: profile.data.target
+            });
+        },
         watcher;
 
     //profile.watch(
     // main entry task
     profile.task(plugin.entry, function ( done ) {
         compiler.run(function ( error, stats ) {
-            console.log('build'.magenta);
-            console.log(error);
-            console.log(stats.toString());
-            //done();
+            //console.log('build'.magenta);
+            //console.log(error);
+            //console.log(stats.toString());
+
+            report(error, stats);
+            done();
         });
         //plugin.build(profile.name, function ( error ) {
             //var message;
@@ -115,12 +189,12 @@ plugin.profiles.forEach(function ( profile ) {
     });
 
     profile.task('watch', function ( done ) {
-        watcher = compiler.watch({}, function ( error, stats ) {
+        watcher = compiler.watch({}, /*function ( error, stats ) {
             console.log('watch'.magenta);
             console.log(error);
             console.log(stats.toString());
             //done();
-        });
+        }*/report);
     });
 
     // remove the generated file
@@ -143,6 +217,7 @@ module.exports = plugin;
 
 return;
 
+/*
 var path     = require('path'),
     util     = require('util'),
     gulp     = require('gulp'),
@@ -158,12 +233,12 @@ var path     = require('path'),
     warnings = false;
 
 
-/**
+/!**
  * Callback to output the statistics.
  *
  * @param {Object} err problem description structure if any
  * @param {Object} stats data to report
- */
+ *!/
 function report ( err, stats ) {
     var json  = stats.toJson({source:false}),
         title = 'webpack '.inverse;
@@ -336,7 +411,7 @@ gulp.task('webpack:release', function () {
                     output: {
                         comments: false
                     },
-                    /*eslint camelcase:0 */
+                    /!*eslint camelcase:0 *!/
                     compress: {
                         warnings: true,
                         unused: true,
@@ -365,3 +440,4 @@ gulp.task('webpack', ['webpack:develop', 'webpack:release']);
 module.exports = {
     compile: compile
 };
+*/
