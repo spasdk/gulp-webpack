@@ -9,7 +9,8 @@
 
 var path   = require('path'),
     extend = require('extend'),
-    config = require('spa-gulp/config');
+    config = require('spa-gulp/config'),
+    entry  = path.resolve(path.join(config.default.source, 'js', 'main.js'));
 
 
 // base config
@@ -17,55 +18,50 @@ var path   = require('path'),
 module.exports = extend(true, {}, config, {
     default: {
         // main entry point
-        source: path.join(config.default.source, 'js', 'main.js'),
+        source: entry,
 
         // intended output file
         target: path.join(config.default.target, 'js', 'release.js'),
-
-        debug: false,
-
-        cache: true,
 
         // local variables available in the source files
         variables: {
             DEBUG: false
         },
 
-        //// whether to use space or tab character for indentation
-        //indentType: 'space',
-        //
-        //// the number of spaces or tabs to be used for indentation
-        //indentWidth: 4,
-        //
-        //// whether to use cr, crlf, lf or lfcr sequence for line break
-        //linefeed: 'lf',
-        //
-        //// output format of the final CSS style
-        //// options: nested, expanded, compact, compressed
-        //outputStyle: 'compressed',
-        //
-        //// how many digits after the decimal will be allowed
-        //precision: 2,
-        //
-        //// additional debugging information in the output file as CSS comments
-        //sourceComments: false,
-
         // the writing location for the source map file
-        // options: file name, true - inline source map, false - disable
-        sourceMap: false
+        sourceMap: '',
 
-        //// whether to include the source files content in the source map
-        //// bigger map file but no need to serve source scss files
-        //sourceMapContents: false
+        // choose a developer tool to enhance debugging
+        devtool: false,
+
+        // info channels
+        notifications: {
+            popup: {
+                info: {
+                    icon: path.join(__dirname, 'media', 'info.png')
+                },
+                warn: {
+                    icon: path.join(__dirname, 'media', 'warn.png')
+                },
+                fail: {
+                    icon: path.join(__dirname, 'media', 'fail.png')
+                }
+            }
+        }
     },
 
     develop: {
+        source: [
+            'spa-develop',
+            entry
+        ],
+
         target: path.join(config.default.target, 'js', 'develop.js'),
 
         variables: {
             DEBUG: true
-        },
+        }
 
-        sourceMap: path.join(config.default.target, 'js', 'develop.map')
+        //devtool: 'eval'
     }
 });
