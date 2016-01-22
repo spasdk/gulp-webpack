@@ -61,16 +61,18 @@ plugin.profiles.forEach(function ( profile ) {
                 path: path.dirname(profile.data.target),
                 sourceMapFilename: profile.data.sourceMap
             },
-            watchOptions: {
-                aggregateTimeout: 1000
-            },
             devtool: profile.data.devtool,
             plugins: [
-                new webpack.optimize.OccurrenceOrderPlugin(true)
+                //new webpack.optimize.OccurrenceOrderPlugin(true)
                 //new webpack.IgnorePlugin(/spa-develop/)
                 //new webpack.ProgressPlugin(function ( percentage, msg ) {
                 //    console.log(msg);
                 //})
+                // global constants
+                new webpack.DefinePlugin({
+                    DEVELOP: true,
+                    CONFIG: require('spa-gulp/config')
+                })
             ]
         }),
         report = function ( err, stats ) {
