@@ -16,36 +16,36 @@ var fs      = require('fs'),
 
 
 // rework profile
-plugin.prepare = function ( name ) {
-    var profile = this.config[name],
-        vars    = profile.variables = profile.variables || {};
-
-    // extend vars
-    //vars.name        = vars.name        || this.package.name;
-
-};
+//plugin.prepare = function ( name ) {
+//    var profile = this.config[name],
+//        vars    = profile.variables = profile.variables || {};
+//
+//    // extend vars
+//    //vars.name        = vars.name        || this.package.name;
+//
+//};
 
 
 // generate output file from profile
-plugin.build = function ( name, callback ) {
-    //var data = this.config[name],
-    //    render;
-	//
-    //try {
-    //    // prepare function
-    //    render = jade.compileFile(data.source, {
-    //        filename: data.source,
-    //        pretty: data.indentString
-    //    });
-	//
-    //    // save generated result
-    //    fs.writeFileSync(data.target, render(data.variables));
-	//
-    //    callback(null);
-    //} catch ( error ) {
-    //    callback(error);
-    //}
-};
+//plugin.build = function ( name, callback ) {
+//    //var data = this.config[name],
+//    //    render;
+//	//
+//    //try {
+//    //    // prepare function
+//    //    render = jade.compileFile(data.source, {
+//    //        filename: data.source,
+//    //        pretty: data.indentString
+//    //    });
+//	//
+//    //    // save generated result
+//    //    fs.writeFileSync(data.target, render(data.variables));
+//	//
+//    //    callback(null);
+//    //} catch ( error ) {
+//    //    callback(error);
+//    //}
+//};
 
 
 // create tasks for profiles
@@ -53,28 +53,8 @@ plugin.profiles.forEach(function ( profile ) {
     // add vars
     //console.log(path.dirname(profile.data.target));
     //plugin.prepare(profile.name);
-    var compiler = webpack({
-            entry: profile.data.source,
-            output: {
-                pathinfo: true,
-                filename: path.basename(profile.data.target),
-                path: path.dirname(profile.data.target),
-                sourceMapFilename: profile.data.sourceMap
-            },
-            devtool: profile.data.devtool,
-            plugins: [
-                //new webpack.optimize.OccurrenceOrderPlugin(true)
-                //new webpack.IgnorePlugin(/spa-develop/)
-                //new webpack.ProgressPlugin(function ( percentage, msg ) {
-                //    console.log(msg);
-                //})
-                // global constants
-                new webpack.DefinePlugin({
-                    DEVELOP: true,
-                    CONFIG: require('spa-gulp/config')
-                })
-            ]
-        }),
+
+    var compiler = webpack(profile.data.webpack),
         report = function ( err, stats ) {
             var json  = stats.toJson({source:false}),
                 log   = [],
