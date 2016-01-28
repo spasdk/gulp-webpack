@@ -123,7 +123,7 @@ profiles.develop.webpack.plugins = [
     // global constants
     new webpack.DefinePlugin({
         DEVELOP: true,
-        LIVERELOAD: require('spa-gulp-livereload/config').default
+        LIVERELOAD: require('spa-gulp-livereload/config').default.tinylr
     })
 ];
 
