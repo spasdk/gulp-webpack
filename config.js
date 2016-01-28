@@ -30,7 +30,7 @@ profiles.default = extend(true, {}, config, {
     // build config
     webpack: {
         // the entry point for the bundle
-        entry: path.resolve(path.join(srcPath, 'main.js')),
+        entry: './' + path.join(srcPath, 'main.js'),
 
         // options affecting the output of the compilation
         output: {
