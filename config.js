@@ -47,6 +47,12 @@ profiles.default = extend(true, {}, config, {
             noParse: [/\.min\.js$/]
         },
 
+        // rebuilds on file change mode
+        watchOptions: {
+            // delay the rebuilt after the first change (in ms)
+            aggregateTimeout: 50
+        },
+
         // choose a developer tool to enhance debugging
         devtool: false,
 
