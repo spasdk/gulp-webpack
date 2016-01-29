@@ -7,9 +7,7 @@
 
 'use strict';
 
-var fs      = require('fs'),
-    path    = require('path'),
-    webpack = require('webpack'),
+var webpack = require('webpack'),
     del     = require('del'),
     Plugin  = require('spa-gulp/lib/plugin'),
     plugin  = new Plugin({name: 'webpack', entry: 'build', context: module});
@@ -50,12 +48,8 @@ var fs      = require('fs'),
 
 // create tasks for profiles
 plugin.profiles.forEach(function ( profile ) {
-    // add vars
-    //console.log(path.dirname(profile.data.target));
-    //plugin.prepare(profile.name);
-
     var compiler = webpack(profile.data.webpack),
-        report = function ( err, stats ) {
+        report   = function ( err, stats ) {
             var json  = stats.toJson({source:false}),
                 log   = [],
                 warnings = false;
@@ -129,54 +123,20 @@ plugin.profiles.forEach(function ( profile ) {
         },
         watcher;
 
-    //profile.watch(
     // main entry task
     profile.task(plugin.entry, function ( done ) {
         compiler.run(function ( error, stats ) {
-            //console.log('build'.magenta);
-            //console.log(error);
-            //console.log(stats.toString());
-
             report(error, stats);
             done();
         });
-        //plugin.build(profile.name, function ( error ) {
-            //var message;
-            //
-            //if ( error ) {
-            //    // prepare
-            //    message = error.message.split('\n');
-            //
-            //    profile.notify({
-            //        type: 'fail',
-            //        info: error.message,
-            //        title: plugin.entry,
-            //        message: [message[0].trim(), '', message[message.length - 1].trim()]
-            //    });
-            //} else {
-            //    profile.notify({
-            //        info: 'write '.green + profile.data.target.bold,
-            //        title: plugin.entry,
-            //        message: profile.data.target
-            //    });
-            //}
-            //
-            //done();
-        //});
     });
-    //);
 
     profile.task('stop', function ( done ) {
         watcher.close(done);
     });
 
     profile.task('watch', function ( done ) {
-        watcher = compiler.watch({}, /*function ( error, stats ) {
-            console.log('watch'.magenta);
-            console.log(error);
-            console.log(stats.toString());
-            //done();
-        }*/report);
+        watcher = compiler.watch(profile.data.webpack.watchOptions, report);
     });
 
     // remove the generated file
