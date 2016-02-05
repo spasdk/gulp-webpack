@@ -7,10 +7,11 @@
 
 'use strict';
 
-var webpack = require('webpack'),
-    del     = require('del'),
-    Plugin  = require('spa-gulp/lib/plugin'),
-    plugin  = new Plugin({name: 'webpack', entry: 'build', context: module});
+var fs      = require('fs'),
+    path    = require('path'),
+    webpack = require('webpack'),
+    Plugin  = require('spasdk/lib/plugin'),
+    plugin  = new Plugin({name: 'webpack', entry: 'build', config: require('./config')});
 
 
 // rework profile
@@ -116,7 +117,7 @@ plugin.profiles.forEach(function ( profile ) {
             }
 
             profile.notify({
-                info: log,
+                info: '\n' + log.join('\n'),
                 title: plugin.entry,
                 message: profile.data.target
             });
@@ -140,18 +141,23 @@ plugin.profiles.forEach(function ( profile ) {
     });
 
     // remove the generated file
-    profile.task('clean', function () {
-        if ( del.sync([profile.data.target]).length ) {
-            // something was removed
+    profile.task('clean', function ( done ) {
+        var target = path.join(profile.data.webpack.output.path, profile.data.webpack.output.filename);
+
+        fs.unlink(target, function ( error ) {
             profile.notify({
-                info: 'delete '.green + profile.data.target.bold,
+                type: error ? 'warn' : 'info',
+                info: error ? error.toString().red : 'delete '.green + target.bold,
                 title: 'clean',
-                message: profile.data.target
+                message: error ? error.toString() : target
             });
-        }
+
+            done();
+        });
     });
 });
 
+//console.log(plugin);
 
 // public
 module.exports = plugin;
