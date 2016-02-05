@@ -1,6 +1,4 @@
 /**
- * Compile all CommonJS modules into a single js file.
- *
  * @author Stanislav Kalashnik <darkpark.main@gmail.com>
  * @license GNU GENERAL PUBLIC LICENSE Version 3
  */
