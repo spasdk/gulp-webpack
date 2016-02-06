@@ -8,6 +8,7 @@
 var fs      = require('fs'),
     path    = require('path'),
     webpack = require('webpack'),
+    app     = require('spasdk/lib/app'),
     Plugin  = require('spasdk/lib/plugin'),
     plugin  = new Plugin({name: 'webpack', entry: 'build', config: require('./config')});
 
@@ -80,12 +81,15 @@ plugin.profiles.forEach(function ( profile ) {
 
                 // data
                 json.modules.forEach(function ( module ) {
+                    var id = path.relative(app.paths.root, module.identifier);
+
                     log.push('\t' +
                         module.id + '\t' +
                         module.size + '\t' +
                         (module.errors > 0 ? module.errors.toString().red : '0') + '\t' +
                         (module.warnings > 0 ? module.warnings.toString().yellow : '0') + '\t' +
-                        (module.name.indexOf('./~/') === 0 ? module.name.replace(/\//g, '/'.grey) : module.name.bold.replace(/\//g, '/'.grey))
+                        //(module.name.indexOf('./~/') === 0 ? module.name.replace(/\//g, '/'.grey) : module.name.bold.replace(/\//g, '/'.grey))
+                        (id.indexOf('node_modules') === 0 ? id.grey : id)
                     );
                 });
 
