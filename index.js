@@ -55,26 +55,26 @@ plugin.profiles.forEach(function ( profile ) {
                 warnings = false;
 
             if ( err ) {
-                log.push('FATAL ERROR'.red, err);
+                log.push('FATAL ERROR', err);
             } else {
                 // general info
-                log.push('********************************'.grey);
-                log.push('hash:\t'    + json.hash.bold);
-                log.push('version:\t' + json.version.bold);
-                log.push('time:\t'    + json.time.toString().bold + ' ms');
-                log.push('********************************'.grey);
+                log.push('********************************');
+                log.push('hash:\t'    + json.hash);
+                log.push('version:\t' + json.version);
+                log.push('time:\t'    + json.time + ' ms');
+                log.push('********************************');
 
                 // title and headers
-                log.push('ASSETS'.green);
-                log.push('\tSize\tName'.grey);
+                log.push('ASSETS');
+                log.push('\tSize\tName');
                 // data
                 json.assets.forEach(function ( asset ) {
-                    log.push('\t' + asset.size + '\t' + asset.name.bold);
+                    log.push('\t' + asset.size + '\t' + asset.name);
                 });
 
                 // title and headers
-                log.push('MODULES'.green);
-                log.push('\tID\tSize\tErrs\tWarns\tName'.grey);
+                log.push('MODULES');
+                log.push('\tID\tSize\tErrs\tWarns\tName');
 
                 // sort modules by name (not always is necessary)
                 //json.modules.sort(function ( a, b ) { return a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
@@ -86,32 +86,32 @@ plugin.profiles.forEach(function ( profile ) {
                     log.push('\t' +
                         module.id + '\t' +
                         module.size + '\t' +
-                        (module.errors > 0 ? module.errors.toString().red : '0') + '\t' +
-                        (module.warnings > 0 ? module.warnings.toString().yellow : '0') + '\t' +
+                        (module.errors > 0 ? module.errors : '0') + '\t' +
+                        (module.warnings > 0 ? module.warnings : '0') + '\t' +
                         //(module.name.indexOf('./~/') === 0 ? module.name.replace(/\//g, '/'.grey) : module.name.bold.replace(/\//g, '/'.grey))
-                        (id.indexOf('node_modules') === 0 ? id.grey : id)
+                        (id.indexOf('node_modules') === 0 ? id : id)
                     );
                 });
 
                 json.errors.forEach(function ( error, errorIndex ) {
-                    log.push(('ERROR #' + errorIndex).red);
+                    log.push(('ERROR #' + errorIndex));
                     error.split('\n').forEach(function ( line, lineIndex ) {
                         if ( lineIndex === 0 ) {
-                            log.push(line.bold);
+                            log.push(line);
                         } else {
-                            log.push('\t' + line.grey);
+                            log.push('\t' + line);
                         }
                     });
                 });
 
                 if ( warnings ) {
                     json.warnings.forEach(function ( warning, warningIndex ) {
-                        log.push(('WARNING #' + warningIndex).yellow);
+                        log.push(('WARNING #' + warningIndex));
                         warning.split('\n').forEach(function ( line, lineIndex ) {
                             if ( lineIndex === 0 ) {
-                                log.push(line.bold);
+                                log.push(line);
                             } else {
-                                log.push('\t' + line.grey);
+                                log.push('\t' + line);
                             }
                         });
                     });
@@ -119,9 +119,8 @@ plugin.profiles.forEach(function ( profile ) {
             }
 
             profile.notify({
-                info: '\n' + log.join('\n'),
                 title: plugin.entry,
-                message: profile.data.target
+                message: log.join('\n')
             });
         },
         watcher;
@@ -149,9 +148,8 @@ plugin.profiles.forEach(function ( profile ) {
         fs.unlink(target, function ( error ) {
             profile.notify({
                 type: error ? 'warn' : 'info',
-                info: error ? error.toString().red : 'delete '.green + target.bold,
                 title: 'clean',
-                message: error ? error.toString() : target
+                message: error || ('delete ' + target)
             });
 
             done();
