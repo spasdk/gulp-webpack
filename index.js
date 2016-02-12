@@ -49,14 +49,17 @@ var fs      = require('fs'),
 // create tasks for profiles
 plugin.profiles.forEach(function ( profile ) {
     var compiler = webpack(profile.data.webpack),
+        modules  = '',
         report   = function ( err, stats ) {
             var json  = stats.toJson({source:false}),
                 log   = [],
+                mList = [],
                 warnings = false;
 
             if ( err ) {
                 log.push('FATAL ERROR', err);
             } else {
+                //console.log(json);
                 // general info
                 log.push('********************************');
                 log.push('hash:\t'    + json.hash);
@@ -82,6 +85,8 @@ plugin.profiles.forEach(function ( profile ) {
                 // data
                 json.modules.forEach(function ( module ) {
                     var id = path.relative(app.paths.root, module.identifier);
+
+                    mList.push(id);
 
                     log.push('\t' +
                         module.id + '\t' +
@@ -116,6 +121,12 @@ plugin.profiles.forEach(function ( profile ) {
                         });
                     });
                 }
+
+                if ( json.errors.length === 0 ) {
+                    modules = JSON.stringify(mList, null, 4);
+
+                    //fs.writeFileSync(app.paths.loadedModules, );
+                }
             }
 
             profile.notify({
@@ -126,20 +137,22 @@ plugin.profiles.forEach(function ( profile ) {
         watcher;
 
     // main entry task
-    profile.task(plugin.entry, function ( done ) {
-        compiler.run(function ( error, stats ) {
-            report(error, stats);
-            done();
-        });
-    });
+    profile.watch(
+        profile.task(plugin.entry, function ( done ) {
+            compiler.run(function ( error, stats ) {
+                report(error, stats);
+                done();
+            });
+        })
+    );
 
-    profile.task('stop', function ( done ) {
-        watcher.close(done);
-    });
-
-    profile.task('watch', function ( done ) {
-        watcher = compiler.watch(profile.data.webpack.watchOptions, report);
-    });
+    //profile.task('stop', function ( done ) {
+    //    watcher.close(done);
+    //});
+	//
+    //profile.task('watch', function ( done ) {
+    //    watcher = compiler.watch(profile.data.webpack.watchOptions, report);
+    //});
 
     // remove the generated file
     profile.task('clean', function ( done ) {

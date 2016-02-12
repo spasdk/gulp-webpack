@@ -42,7 +42,7 @@ profiles.default = extend(true, {}, config, {
         module: {
             // don't parse files matching
             // they are expected to have no call to require, define or similar
-            noParse: [/\.min\.js$/]
+            noParse: [/\.min\.js$/, /livereload\.js$/]
         },
 
         // rebuilds on file change mode
@@ -87,6 +87,10 @@ profiles.default = extend(true, {}, config, {
             ))
         ]
     },
+
+    // false to prevent watch task creation
+    // otherwise array of globs to monitor
+    watch: [path.join(config.source, 'js', '**', '*.js')],
 
     // info channels
     notifications: {
