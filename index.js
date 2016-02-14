@@ -129,9 +129,15 @@ plugin.profiles.forEach(function ( profile ) {
 
                     if ( jsonCurr !== jsonSave ) {
                         fs.mkdir(profile.data.cache, function () {
-                            fs.writeFileSync(
-                                path.join(profile.data.cache, profile.name + '.json'), jsonCurr
-                            );
+                            var file = path.join(profile.data.cache, profile.name + '.json');
+
+                            fs.writeFileSync(file, jsonCurr);
+
+                            profile.notify({
+                                title: 'cache',
+                                message: 'write ' + file,
+                                tags: ['cache']
+                            });
 
                             jsonSave = jsonCurr;
                         });
