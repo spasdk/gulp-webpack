@@ -49,11 +49,12 @@ var fs      = require('fs'),
 // create tasks for profiles
 plugin.profiles.forEach(function ( profile ) {
     var compiler = webpack(profile.data.webpack),
-        modules  = '',
+        jsonSave = '',
+        jsonCurr = '',
         report   = function ( err, stats ) {
-            var json  = stats.toJson({source:false}),
-                log   = [],
-                mList = [],
+            var json     = stats.toJson({source:false}),
+                log      = [],
+                modules  = [],
                 warnings = false;
 
             if ( err ) {
@@ -86,7 +87,7 @@ plugin.profiles.forEach(function ( profile ) {
                 json.modules.forEach(function ( module ) {
                     var id = path.relative(app.paths.root, module.identifier);
 
-                    mList.push(id);
+                    modules.push(id);
 
                     log.push('\t' +
                         module.id + '\t' +
@@ -122,10 +123,19 @@ plugin.profiles.forEach(function ( profile ) {
                     });
                 }
 
+                // save cache
                 if ( json.errors.length === 0 ) {
-                    modules = JSON.stringify(mList, null, 4);
+                    jsonCurr = JSON.stringify(modules, null, 4);
 
-                    //fs.writeFileSync(app.paths.loadedModules, );
+                    if ( jsonCurr !== jsonSave ) {
+                        fs.mkdir(profile.data.cache, function () {
+                            fs.writeFileSync(
+                                path.join(profile.data.cache, profile.name + '.json'), jsonCurr
+                            );
+
+                            jsonSave = jsonCurr;
+                        });
+                    }
                 }
             }
 

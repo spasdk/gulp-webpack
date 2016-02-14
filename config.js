@@ -25,6 +25,9 @@ profiles.default = extend(true, {}, config, {
     // output files location
     target: dstPath,
 
+    // dir for temp files
+    cache: path.join(srcPath, '.cache'),
+
     // build config
     webpack: {
         // the entry point for the bundle
