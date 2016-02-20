@@ -147,13 +147,15 @@ plugin.profiles.forEach(function ( profile ) {
 
             profile.notify({
                 title: plugin.entry,
-                message: log.join('\n')
+                //message: log.join('\n')
+                info: 'write ' + path.join(profile.data.webpack.output.path, profile.data.webpack.output.filename),
+                message: json
             });
         },
         watcher;
 
     // main entry task
-    profile.watch(
+    profile.watch('', profile.data.watch,
         profile.task(plugin.entry, function ( done ) {
             compiler.run(function ( error, stats ) {
                 report(error, stats);
