@@ -135,7 +135,7 @@ plugin.profiles.forEach(function ( profile ) {
 
                             profile.notify({
                                 title: 'cache',
-                                message: 'write ' + file,
+                                info: 'write ' + file,
                                 tags: ['cache']
                             });
 
@@ -180,7 +180,8 @@ plugin.profiles.forEach(function ( profile ) {
             profile.notify({
                 type: error ? 'warn' : 'info',
                 title: 'clean',
-                message: error || ('delete ' + target)
+                info: 'delete ' + target,
+                message: error ? error.message : ''
             });
 
             done();
