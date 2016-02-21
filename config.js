@@ -74,13 +74,16 @@ profiles.default = extend(true, {}, config, {
                 output: {
                     comments: false
                 },
+                /* eslint camelcase: 0 */
                 compress: {
                     warnings: true,
                     unused: true,
                     dead_code: true,
                     drop_console: true,
                     drop_debugger: true,
-                    pure_funcs: ['debug.assert', 'debug.log', 'debug.info', 'debug.inspect', 'debug.event', 'debug.stub', 'debug.time', 'debug.timeEnd']
+                    pure_funcs: [
+                        'debug.assert', 'debug.log', 'debug.info', 'debug.inspect', 'debug.event', 'debug.stub', 'debug.time', 'debug.timeEnd'
+                    ]
                 }
             }),
             // add comment to the top of app.js
