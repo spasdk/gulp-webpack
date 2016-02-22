@@ -55,7 +55,7 @@ profiles.default = extend(true, {}, config, {
         },
 
         // choose a developer tool to enhance debugging
-        devtool: false,
+        devtool: 'source-map',
 
         // additional functionality
         plugins: [
@@ -121,7 +121,7 @@ profiles.develop = extend(true, {}, profiles.default, {
         },
 
         // choose a developer tool to enhance debugging
-        devtool: 'eval',
+        //devtool: 'eval',
 
         // polyfills or mocks
         node: {
