@@ -45,7 +45,14 @@ profiles.default = extend(true, {}, config, {
         module: {
             // don't parse files matching
             // they are expected to have no call to require, define or similar
-            noParse: [/\.min\.js$/, /livereload\.js$/]
+            noParse: [/\.min\.js$/, /livereload\.js$/],
+
+            loaders: [
+                //{
+                //    test: /cjs-validator/,
+                //    loader: 'less'
+                //}
+            ]
         },
 
         // rebuilds on file change mode
@@ -59,10 +66,12 @@ profiles.default = extend(true, {}, config, {
 
         // additional functionality
         plugins: [
+            //new webpack.IgnorePlugin(/cjs-validator/),
             // fix compilation persistence
             //new webpack.optimize.OccurenceOrderPlugin(true),
             // global constants
             new webpack.DefinePlugin({
+                DEBUG: false,
                 DEVELOP: false
             }),
             // obfuscation
@@ -136,6 +145,7 @@ profiles.develop = extend(true, {}, profiles.default, {
 profiles.develop.webpack.plugins = [
     // global constants
     new webpack.DefinePlugin({
+        DEBUG: true,
         DEVELOP: true,
         LIVERELOAD: require('spa-plugin-livereload/config').default.tinylr
     })
