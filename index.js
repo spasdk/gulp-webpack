@@ -143,6 +143,8 @@ plugin.profiles.forEach(function ( profile ) {
                         });
                     }
                 }
+
+                plugin.debug(log.join('\n'));
             }
 
             profile.notify({
