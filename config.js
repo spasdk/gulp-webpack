@@ -40,6 +40,14 @@ profiles.release = extend(true, {}, config, {
             sourceMapFilename: 'release.map'
         },
 
+        // affecting the resolving of modules
+        resolve: {
+            alias: {
+                // config.js file in js root
+                'app:config': path.join(process.cwd(), srcPath, 'config.js')
+            }
+        },
+
         // options affecting the normal modules
         // NormalModuleFactory
         module: {
