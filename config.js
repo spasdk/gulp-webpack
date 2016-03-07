@@ -18,7 +18,7 @@ var util     = require('util'),
 
 
 // main
-profiles.default = extend(true, {}, config, {
+profiles.release = extend(true, {}, config, {
     // source files location
     source: srcPath,
 
@@ -119,7 +119,7 @@ profiles.default = extend(true, {}, config, {
 
 
 // additional
-profiles.develop = extend(true, {}, profiles.default, {
+profiles.develop = extend(true, {}, profiles.release, {
     // build config
     webpack: {
         // options affecting the output of the compilation
