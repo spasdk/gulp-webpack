@@ -16,6 +16,9 @@
         "spa-plugin": "spasdk/plugin",
         "webpack": "1.*.*"
     },
+    "devDependencies": {
+        "spa-eslint-config": "spasdk/eslint-config"
+    },
     "keywords": [
         "spa",
         "spasdk",
