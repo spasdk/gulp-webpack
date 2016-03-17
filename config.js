@@ -79,7 +79,6 @@ profiles.release = extend(true, {}, config, {
             //new webpack.optimize.OccurenceOrderPlugin(true),
             // global constants
             new webpack.DefinePlugin({
-                DEBUG: false,
                 DEVELOP: false
             }),
             // obfuscation
@@ -153,7 +152,6 @@ profiles.develop = extend(true, {}, profiles.release, {
 profiles.develop.webpack.plugins = [
     // global constants
     new webpack.DefinePlugin({
-        DEBUG: true,
         DEVELOP: true,
         LIVERELOAD: require('spa-plugin-livereload/config').default.tinylr
     })
