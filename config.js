@@ -26,7 +26,7 @@ profiles.release = extend(true, {}, config, {
     target: dstPath,
 
     // dir for temp files
-    cache: path.join(srcPath, '.cache'),
+    //cache: path.join(srcPath, '.cache'),
 
     // build config
     webpack: {
