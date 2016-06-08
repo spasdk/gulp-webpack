@@ -56,6 +56,10 @@ profiles.release = extend(true, {}, config, {
             noParse: [/\.min\.js$/, /livereload\.js$/],
 
             loaders: [
+                {
+                    test: /\.json$/,
+                    loader: 'json'
+                }
                 //{
                 //    test: /cjs-validator/,
                 //    loader: 'less'
