@@ -96,7 +96,8 @@ profiles.release = extend(true, {}, config, {
                 },
                 /* eslint camelcase: 0 */
                 compress: {
-                    warnings: true,
+                    // display warnings when dropping unreachable code or unused declarations etc.
+                    warnings: false,
                     unused: true,
                     dead_code: true,
                     drop_console: true,
