@@ -11,7 +11,8 @@
         "url": "https://github.com/spasdk/plugin-webpack.git"
     },
     "scripts": {
-        "lint": "eslint *.js",
+        "lint": "eslint .",
+        "test": "npm run lint",
         "jsdoc": "jsdoc --destination doc *.js readme.md"
     },
     "dependencies": {
@@ -21,6 +22,7 @@
         "webpack": "1.*.*"
     },
     "devDependencies": {
+        "eslint": "2.*.*",
         "spa-eslint-config": "spasdk/eslint-config"
     },
     "keywords": [
