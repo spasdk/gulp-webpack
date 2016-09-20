@@ -22,7 +22,7 @@
         "webpack": "1.*.*"
     },
     "devDependencies": {
-        "eslint": "2.*.*",
+        "eslint": "3.*.*",
         "spa-eslint-config": "spasdk/eslint-config"
     },
     "keywords": [
