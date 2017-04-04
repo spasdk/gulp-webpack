@@ -102,6 +102,7 @@ profiles.release = extend(true, {}, config, {
                     dead_code: true,
                     drop_console: true,
                     drop_debugger: true,
+                    properties: false,
                     pure_funcs: [
                         // todo: check and rework this list
                         'debug.assert', 'debug.log', 'debug.info', 'debug.warn', 'debug.fail', 'debug.inspect',
