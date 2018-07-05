@@ -92,7 +92,8 @@ profiles.release = extend(true, {}, config, {
                 // mangle: false,
                 sourceMap: false,
                 output: {
-                    comments: false
+                    comments: false,
+                    keep_quoted_props: true
                 },
                 /* eslint camelcase: 0 */
                 compress: {
